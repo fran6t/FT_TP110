@@ -18,11 +18,10 @@ Lien doc plugin WifiLightV2 https://bcaro.github.io/wifilightV2-doc/fr_FR/
 Lien doc plugin script https://doc.jeedom.com/fr_FR/plugins/programming/script/beta/
 
 
-Pour obtenir l'executable qui va permettre le dialogue avec la ou les prises :
+Obtenir l'Exécutable pour le Dialogue avec la ou les Prises
 
-Connectez vous sur la machine Jeedom avec le terminal
-
-## Clonage du Dépôt
+Connectez-vous à la machine Jeedom avec le terminal.
+Clonage du Dépôt
 
 Pour obtenir une copie du projet sur votre machine, exécutez les commandes suivantes dans votre console SSH :
 
@@ -31,46 +30,43 @@ git clone https://github.com/fran6t/FT_TP110.git
 cd FT_TP110
 ```
 
-Nous avons besoins du langage Rust
-
-Pour cela essayons de voir s'il est pas déjà sur la machine en tapant 
+Note : Nous avons besoin du langage Rust. Vérifiez s'il est déjà installé sur la machine en tapant la commande suivante :
 
 ```bash
-cargo -V 
+cargo -V
 ```
 
-Si vous obtenez une version c'est que Rust est déjà là par exemple chez moi je me souvenez plus l'avoir installer pour gerer un purificateur d'air xiomi
+Si vous obtenez une version, cela signifie que Rust est déjà installé. Par exemple, chez moi, je ne me souvenais pas l'avoir installé pour gérer un purificateur d'air Xiaomi.
 
-Si RUST est intallé vous pouvez le mettre çà jour en faisant
+Si Rust est installé, vous pouvez le mettre à jour en utilisant la commande :
 
 ```bash
 rustup update
 ```
 
-Si RUST n'est pas sur la machine vous pouvez l'installer avec la commande 
+Si Rust n'est pas installé sur la machine, vous pouvez le faire avec la commande suivante :
 
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-La desinstallation de RUST si besoins se fait en tapant 
+La désinstallation de Rust, si nécessaire, se fait en tapant :
+
 ```bash
 rustup self uninstall
 ```
 
-Voila nous sommes prêt à faire un premier test de notre prise
+Maintenant, nous sommes prêts à effectuer un premier test avec notre prise.
 
-Par l'application TAPO, nous connaissons notre login pass et nous pouvons aller voir l'adresse IP de la prise
+À l'aide de l'application TAPO, obtenez votre login, mot de passe et l'adresse IP de la prise.
 
-Nous allons pouvoir effectuer un premier test en lançant la commande 
+Effectuez un premier test en lançant la commande suivante :
 
 ```bash
 cargo run 192.168.0.70 monadressemail monmotdepasse on
 ```
 
-Cela doit construire l'application puis appeler la prise a l'aide de son adresse ip des infos de login et on pour allumer la prise
-
-
+Cela va construire l'application puis appeler la prise en utilisant son adresse IP, les informations de login, et "on" pour allumer la prise.
 
 
 
