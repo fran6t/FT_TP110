@@ -29,6 +29,7 @@ Pour obtenir une copie du projet sur votre machine, exécutez les commandes suiv
 ```bash
 git clone https://github.com/fran6t/FT_TP110.git
 cd FT_TP110
+```
 
 Nous avons besoins du langage Rust
 
@@ -36,6 +37,7 @@ Pour cela essayons de voir s'il est pas déjà sur la machine en tapant
 
 ```bash
 cargo -V 
+```
 
 Si vous obtenez une version c'est que Rust est déjà là par exemple chez moi je me souvenez plus l'avoir installer pour gerer un purificateur d'air xiomi
 
@@ -43,16 +45,18 @@ Si RUST est intallé vous pouvez le mettre çà jour en faisant
 
 ```bash
 rustup update
+```
 
 Si RUST n'est pas sur la machine vous pouvez l'installer avec la commande 
 
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
 
 La desinstallation de RUST si besoins se fait en tapant 
 ```bash
 rustup self uninstall
-
+```
 
 Voila nous sommes prêt à faire un premier test de notre prise
 
@@ -62,8 +66,9 @@ Nous allons pouvoir effectuer un premier test en lançant la commande
 
 ```bash
 cargo run 192.168.0.70 monadressemail monmotdepasse on
+```
 
-Cela doit construire l'applucation puis appeler la prise a l'aide de son adresse ip des infos de login et on pour allumer la prise
+Cela doit construire l'application puis appeler la prise a l'aide de son adresse ip des infos de login et on pour allumer la prise
 
 
 
