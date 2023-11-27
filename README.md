@@ -104,7 +104,7 @@ cp target/release/ft_tp110 /var/www/html/plugins/script/data/
 On change le propriétaire pour que Jeedom puisse avoir la main dessus
 ```bash
 chown www-data:www-data /var/www/html/plugins/script/data/ft_tp110
-
+```
 
 Maintenant le reste se passe dans Jeedom avec le plugins script
 
@@ -113,7 +113,7 @@ Etape 0
 
 On installe le plugin script officiel Jeedom
 
-![Etape 0](0-Script-Officiel.jpg)
+![Etape 0](img/0-Script-Officiel.jpg)
 
 
 Etape 1
