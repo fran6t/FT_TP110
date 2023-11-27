@@ -17,3 +17,58 @@ Discussion plugin officiel WifiLightV2 https://community.jeedom.com/tag/plugin-w
 Lien doc plugin WifiLightV2 https://bcaro.github.io/wifilightV2-doc/fr_FR/
 Lien doc plugin script https://doc.jeedom.com/fr_FR/plugins/programming/script/beta/
 
+
+Pour obtenir l'executable qui va permettre le dialogue avec la ou les prises :
+
+Connectez vous sur la machine Jeedom avec le terminal
+
+## Clonage du Dépôt
+
+Pour obtenir une copie du projet sur votre machine, exécutez les commandes suivantes dans votre console SSH :
+
+```bash
+git clone https://github.com/fran6t/FT_TP110.git
+cd FT_TP110
+
+Nous avons besoins du langage Rust
+
+Pour cela essayons de voir s'il est pas déjà sur la machine en tapant 
+
+```bash
+cargo -V 
+
+Si vous obtenez une version c'est que Rust est déjà là par exemple chez moi je me souvenez plus l'avoir installer pour gerer un purificateur d'air xiomi
+
+Si RUST est intallé vous pouvez le mettre çà jour en faisant
+
+```bash
+rustup update
+
+Si RUST n'est pas sur la machine vous pouvez l'installer avec la commande 
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+La desinstallation de RUST si besoins se fait en tapant 
+```bash
+rustup self uninstall
+
+
+Voila nous sommes prêt à faire un premier test de notre prise
+
+Par l'application TAPO, nous connaissons notre login pass et nous pouvons aller voir l'adresse IP de la prise
+
+Nous allons pouvoir effectuer un premier test en lançant la commande 
+
+```bash
+cargo run 192.168.0.70 monadressemail monmotdepasse on
+
+Cela doit construire l'applucation puis appeler la prise a l'aide de son adresse ip des infos de login et on pour allumer la prise
+
+
+
+
+
+
+
+
