@@ -115,7 +115,7 @@ On installe le plugin script officiel Jeedom
 
 Etape 1
 
-![Etape 1](https://github.com/fran6t/FT_TP110/blob/main/img/1-plugin-Mes-Scripts.png)
+![Etape 1](blob/main/img/1-plugin-Mes-Scripts.png)
 
 Etape 2
 
