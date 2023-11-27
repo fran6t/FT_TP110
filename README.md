@@ -11,3 +11,9 @@ L'auteur a créé une API en utilisant le langage Rust (également appelable en 
 D'après mes investigations, à partir d'une certaine version du firmware, TP LINK a renforcé la sécurité de la prise en introduisant une authentification à deux étapes. La première étape consiste à envoyer une clé à la prise, que le programme doit utiliser pour chiffrer le nom d'utilisateur et le mot de passe lors de la deuxième étape, tout en obtenant des informations de session.
 
 En attendant une éventuelle mise à jour du plugin wifilightv2 ou d'un autre plugin compatible, j'envisage d'utiliser cette API Rust via le plugin Jeedom SCRIPT.
+
+Discussion sur le probleme forum JEEDOM https://community.jeedom.com/t/p110-ne-fonctionne-plus/116182
+Discussion plugin officiel WifiLightV2 https://community.jeedom.com/tag/plugin-wifilightv2
+Lien doc plugin WifiLightV2 https://bcaro.github.io/wifilightV2-doc/fr_FR/
+Lien doc plugin script https://doc.jeedom.com/fr_FR/plugins/programming/script/beta/
+
