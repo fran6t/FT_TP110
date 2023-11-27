@@ -63,10 +63,73 @@ Maintenant, nous sommes prêts à effectuer un premier test avec notre prise.
 Effectuez un premier test en lançant la commande suivante :
 
 ```bash
-cargo run 192.168.0.70 monadressemail monmotdepasse on
+cargo run
 ```
 
-Cela va construire l'application puis appeler la prise en utilisant son adresse IP, les informations de login, et "on" pour allumer la prise.
+Cela va construire l'application puis lancer le programme mais comme nous n'avons pas donné de paramètres nous obtenons 
+
+```bash
+Finished dev [unoptimized + debuginfo] target(s) in 0.16s
+Running `target/debug/ft_tp110`
+Usage: cargo run <adresse_ip> <login> <pass> <action>
+```
+
+Maintenant avec les bon parametre comme cela nous voyons qu'il y a 1 en reponse e, effet en passant on en parametre le programme repond 1
+Si nous passons off il doit y avoir 0 en réponse
+Si nous passons get_current_power il doit y avoir 0 si la prise et eteint ou sans charge et sinon un chiffre qui reflete la puissance en W qui passe au travers de la prise
+
+Pour mémoire l'adresse mail et le mot de passe sont les mêmes qui ont servis à la configuration et/ou l'utilisation de la prise avec l'application TAPO 
+
+```bash
+cargo run 192.168.0.70 monadressemail monmotdepasse on
+Finished dev [unoptimized + debuginfo] target(s) in 0.16s
+Running `target/debug/ft_tp110 192.168.0.70 'monadressemail' monmotdepasse on`
+1
+
+```
+
+Si vous arrivez a commander votre prise, nous pouvons alors passer à la génération du binaire qui servira a Jeedom 
+pour cela nous lançons la commande ci-dessous 
+
+```bash
+cargo build --release
+```
+
+Nous obtenons donc un binaire que nous pouvons maintenant copier au sein de Jeedom 
+
+```bash
+cp target/release/ft_tp110 /var/www/html/plugins/script/data/
+```
+
+On change le propriétaire pour que Jeedom puisse avoir la main dessus
+```bash
+chown www-data:www-data /var/www/html/plugins/script/data/ft_tp110
+
+
+Maintenant le reste se passe dans Jeedom avec le plugins script
+
+
+Etape 0
+
+On installe le plugin script officiel Jeedom
+
+Etape 1
+
+Etape 2
+
+Etape 3
+
+Etape 4
+
+Etape 5
+
+On recommemce avec la commande off
+
+Etape 6
+
+On crée une commande info pour avoir le retour de la puissance qui traverse la prise
+
+
 
 
 
