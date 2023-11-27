@@ -113,21 +113,34 @@ Etape 0
 
 On installe le plugin script officiel Jeedom
 
+![Etape 0](0-Script-Officiel.jpg)
+
+
 Etape 1
 
-![Etape 1](img/1-plugin-Mes-Scripts.png)
+![Etape 1](img/1-plugin-Mes-Scripts.jpg)
 
 Etape 2
 
+![Etape 2](img/2-Ajout-mes_scripts.jpg)
+
 Etape 3
+
+![Etape 3](img/3-Activer-rendre-visible.jpg)
 
 Etape 4
 
+![Etape 1](img/4-Selection-du-script.jpg)
+
 Etape 5
+
+![Etape 5](img/5-ajouter-une-commande.jpg)
 
 On recommemce avec la commande off
 
 Etape 6
+
+![Etape 6](img/6-les-infos.jpg)
 
 On crée une commande info pour avoir le retour de la puissance qui traverse la prise
 
