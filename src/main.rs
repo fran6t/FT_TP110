@@ -24,7 +24,7 @@
 /// Script de Contrôle pour Prise Tapo
 /// ...
 
-use std::{env, process, time::Duration};
+use std::{env, thread, process, time::Duration};
 extern crate paho_mqtt as mqtt;
 use tokio::time::Duration as TokioDuration;
 use config::{Config, File};
@@ -87,17 +87,22 @@ fn load_config() -> Result<(MqttConfig, TapoConfig), Box<dyn std::error::Error>>
 
 
 // Fonction pour envoyer le message MQTT
-fn send_mqtt_message(broker: String, client_id: String, mut topic: String, message_content: String, quelproto: String ) {
+fn send_mqtt_message(broker: &str, client_id: &str, topic: &str, message_content: &str, quelproto: &str) {
+    
     
     if quelproto != "none" {
+
+        // Create a String from the given &str
+        let mut topic_string = String::from(topic);
 
         // Construisons ce qui va être le nom de l'equipement decouvert en automatique par le plugin Jeedom MQTT
         // Dansft_tp110_config.toml j'ai mis topic_name = "/maison/TpLink_"
         // Ici je reprends le derniers champs de l'adresse ip de la prise
         // Mon equipement est a l'adresse 192.168.0.70
         // La chaine construite sera alors "/maison/TpLink_70"
-        let last_octet = client_id.split('.').last().unwrap_or("0");
-        topic.push_str(last_octet);
+        let last_octet = client_id.split('.').last().unwrap_or("0").to_string();
+        topic_string.push_str(&last_octet);
+
         let qos = 1;
         let host = broker.to_string();
 
@@ -122,7 +127,7 @@ fn send_mqtt_message(broker: String, client_id: String, mut topic: String, messa
         }
 
         let content = message_content;
-        let msg = mqtt::Message::new(topic.to_string(), content.to_string(), qos);
+        let msg = mqtt::Message::new(topic_string, content.to_string(), qos);
         if let Err(e) = cli.publish(msg) {
             println!("Error sending message: {:?}", e);
             process::exit(1);
@@ -188,17 +193,58 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             // println!(r#"{{"error_code": 0, "device_on": true}}"#);
             device.on().await?;
             println!("1");
+            if quelprotocol != "none" {
+                
+                // On fait un device_info pour envoyer un message mqtt qui va rafraichier l'équipement dans Jeedom
+                let device_info = device.get_device_info().await?;
+                let json_string = to_string(&device_info)?;
+                //send_mqtt_message(default_broker, default_client.to_string(), default_topic, json_string, quelprotocol.to_string());
+                send_mqtt_message(&default_broker, &default_client.to_string(), &default_topic, &json_string, &quelprotocol.to_string());
+                
+                // Pause de 0.5 seconde car apres un on la mesure n'est pas instantanée
+                thread::sleep(Duration::from_secs(5));
+
+                // On fait un get_current_power  pour envoyer un message mqtt qui va rafraichier l'équipement dans Jeedom
+                // Quand c'etait renvoi sous forme json
+                let current_power = device.get_current_power().await?;
+                let json_string = to_string(&current_power)?;
+                //println!("{}", json_string)
+                //send_mqtt_message(default_broker, default_client.to_string(), default_topic, json_string, quelprotocol.to_string());
+                send_mqtt_message(&default_broker, &default_client.to_string(), &default_topic, &json_string, &quelprotocol.to_string());
+                
+            }
         }
         "off" => {
             //println!(r#"{{"error_code": 0, "device_on": false}}"#);
             device.off().await?;
             println!("0");
+            if quelprotocol != "none" {
+                
+                // On fait un device_info pour envoyer un message mqtt qui va rafraichier l'équipement dans Jeedom
+                let device_info = device.get_device_info().await?;
+                let json_string = to_string(&device_info)?;
+                //send_mqtt_message(default_broker, default_client.to_string(), default_topic, json_string, quelprotocol.to_string());
+                send_mqtt_message(&default_broker, &default_client.to_string(), &default_topic, &json_string, &quelprotocol.to_string());
+                
+                // Pause de 0.5 seconde car apres un on la mesure n'est pas instantanée
+                thread::sleep(Duration::from_secs(5));
+                
+                // On fait un get_current_power  pour envoyer un message mqtt qui va rafraichier l'équipement dans Jeedom
+                // Quand c'etait renvoi sous forme json
+                let current_power = device.get_current_power().await?;
+                let json_string = to_string(&current_power)?;
+                //println!("{}", json_string)
+                //send_mqtt_message(default_broker, default_client.to_string(), default_topic, json_string, quelprotocol.to_string());
+                send_mqtt_message(&default_broker, &default_client.to_string(), &default_topic, &json_string, &quelprotocol.to_string());
+                
+            }
         }
         "device_info" => {
             let device_info = device.get_device_info().await?;
             let json_string = to_string(&device_info)?;
             println!("{}", json_string);
-            send_mqtt_message(default_broker, default_client.to_string(), default_topic, json_string, quelprotocol.to_string());
+            //send_mqtt_message(default_broker, default_client.to_string(), default_topic, json_string, quelprotocol.to_string());
+            send_mqtt_message(&default_broker, &default_client.to_string(), &default_topic, &json_string, &quelprotocol.to_string());
         }
         "device_usage" => {
             let device_usage = device.get_device_usage().await?;
@@ -212,7 +258,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             let current_power = device.get_current_power().await?;
             let json_string = to_string(&current_power)?;
             //println!("{}", json_string)
-            send_mqtt_message(default_broker, default_client.to_string(), default_topic, json_string, quelprotocol.to_string());
+            //send_mqtt_message(default_broker, default_client.to_string(), default_topic, json_string, quelprotocol.to_string());
+            send_mqtt_message(&default_broker, &default_client.to_string(), &default_topic, &json_string, &quelprotocol.to_string());
             //let current_power_result = device.get_current_power().await?;
             //let current_power_value = current_power_result.current_power;
             println!("{}", current_power.current_power);
@@ -221,7 +268,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             let energy_usage = device.get_energy_usage().await?;
             let json_string = to_string(&energy_usage)?;           
             println!("{}", json_string);
-            send_mqtt_message(default_broker, default_client.to_string(), default_topic, json_string, quelprotocol.to_string());
+            //send_mqtt_message(default_broker, default_client.to_string(), default_topic, json_string, quelprotocol.to_string());
+            send_mqtt_message(&default_broker, &default_client.to_string(), &default_topic, &json_string, &quelprotocol.to_string());
         }
         _ => {
             eprintln!("Invalid action. Use 'on' or 'off' or 'device_info' or 'device_usage' or 'get_current_power' or 'get_energy_usage.");
