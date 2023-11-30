@@ -139,9 +139,69 @@ fn send_mqtt_message(broker: &str, client_id: &str, topic: &str, message_content
     }
 }
 
+fn print_help() {
+    println!("Usage: ft_tp110 --adresseip=<ip_address> --action=<action> [--protocol=<protocol>]");
+    println!("       ft_tp110 --version");
+    println!("       ft_tp110 --help");
+}
+
+
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+
+    let args: Vec<String> = env::args().collect();
+
+    // If no arguments are provided, or if --help is specified, print help message
+    if args.len() == 1 || args.contains(&String::from("--help")) {
+        print_help();
+        process::exit(0);
+    }
+
+    // If --version is specified, print version and exit
+    if args.contains(&String::from("--version")) {
+        println!("Version 0.1");
+        process::exit(0);
+    }
+
+    // Parse named arguments
+    let mut ip_address = None;
+    let mut action_jeedom = None;
+    let mut quel_protocol = None;
+
+    for arg in args.iter().skip(1) {
+        let parts: Vec<&str> = arg.split('=').collect();
+        if parts.len() != 2 {
+            eprintln!("Invalid argument: {}", arg);
+            process::exit(1);
+        }
+
+        match parts[0] {
+            "--adresseip" => ip_address = Some(parts[1].to_string()),
+            "--action" => action_jeedom = Some(parts[1].to_string()),
+            "--protocol" => quel_protocol = Some(parts[1].to_string()),
+            _ => {
+                eprintln!("Unknown argument: {}", arg);
+                process::exit(1);
+            }
+        }
+    }
+
+    // Check if required arguments are provided
+    if ip_address.is_none() || action_jeedom.is_none() {
+        eprintln!("Usage: ft_tp110 --adresseip=<ip_address> --action=<action> [--protocol=<protocol>]");
+        process::exit(1);
+    }
+
+    // Use variables as needed in the rest of your script
+    let ip_address = ip_address.unwrap();
+    let action_jeedom = action_jeedom.unwrap();
+    let quelprotocol = quel_protocol.unwrap_or_else(|| "none".to_string());
+
+    // Now you can use ip_address, action_jeedom, and quelprotocol as needed
+    //println!("IP Address: {:?}", ip_address);
+    //println!("Action Jeedom: {:?}", action_jeedom);
+    //println!("Quel Protocol: {:?}", quelprotocol);
 
     // Chargez la configuration à partir du fichier
     let (mqtt_config, tapo_config) = match load_config() {
@@ -155,25 +215,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     
     // Attente pour laisser le temps à MQTT de traiter le message (peut être ajusté selon vos besoins)
     tokio::time::sleep(TokioDuration::from_secs(2)).await;
-
-    let args: Vec<String> = env::args().collect();
-    if args.len() < 3 || args.len() > 4 {   //Il faut 2 arguments obligatoire le 3eme facutatif
-        eprintln!("Usage: cargo run <adresse_ip> <action> <protocol>");
-        process::exit(1);
-    }
-
-    let ip_address = &args[1];
-    let action_jeedom = &args[2];
-    let quelprotocol = args.get(3).map_or("none", |p| p);      // Si il y a pas de parametre quelprotocol vaudra "none" sinon la valeur du parametre passé au script
-
-    
+  
     // Les variables pour mqtt    
     //let _broker_address = mqtt_config.broker_address;
     let default_broker = format!("tcp://{}:1883", mqtt_config.broker_address);
     // println!("Default Broker: {}", default_broker);
     // default_client est le nom qui est presenté au brocker pour le suivi du coup je vais y mettre la chaine de caractere de l'adresse ip comme ça c'est bien unique pourle reseau
     //let default_client = "rust_publish".to_string();
-    let default_client = ip_address;
+    let default_client = ip_address.clone();
     //let _topic_name = mqtt_config.topic_name;
     let default_topic = mqtt_config.topic_name;
     
