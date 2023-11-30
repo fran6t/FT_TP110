@@ -2,7 +2,7 @@
 ///
 /// Ce script est conçu pour contrôler une prise intelligente Tapo (P110) via son API.
 /// Il permet à l'utilisateur d'allumer ou d'éteindre l'appareil en fonction de l'action spécifiée.
-/// De plus, le script peut afficher des informations sur l'appareil en mode 'status'.
+/// De plus, le script peut afficher des informations sur l'appareil ne repondant un json ou en l'envoyant vers un broker MQTT'.
 ///
 /// Utilisation :
 ///     cargo run <adresse_ip> <login> <pass> <action> <jeton>
@@ -31,7 +31,7 @@ use config::{Config, File};
 use serde::Deserialize;
 use tapo::ApiClient;
 use serde_json::to_string;
-use std::path::Path;
+
 
 
 // Pour recuperer les valeurs dans le fichier config
@@ -48,19 +48,27 @@ struct TapoConfig {
     tapo_password: String,
 }
 
+
 fn load_config() -> Result<(MqttConfig, TapoConfig), Box<dyn std::error::Error>> {
     // Créez une nouvelle instance de configuration
     let mut settings = Config::default();
 
-    // En cas de presence d'un fichier de configuration _perso c'est lui qui l'emporte
-    let config_file_name = if Path::new("ft_tp110_config_perso.toml").exists() {
+    // Obtenez le répertoire actuel de l'exécutable
+    let exe_path = env::current_exe()?;
+    let current_dir = exe_path.parent().ok_or("Impossible de déterminer le répertoire de l'exécutable")?;
+
+    // Vérifiez l'existence du fichier de configuration personnel
+    let config_file_name = if current_dir.join("ft_tp110_config_perso.toml").exists() {
         "ft_tp110_config_perso.toml"
     } else {
         "ft_tp110_config.toml"
     };
 
+    // Construisez le chemin absolu du fichier de configuration
+    let config_path = current_dir.join(config_file_name);
+
     // Chargez la configuration à partir du fichier
-    if let Err(e) = settings.merge(File::with_name(config_file_name)) {
+    if let Err(e) = settings.merge(File::from(config_path)) {
         // Vérifiez s'il s'agit d'une erreur indiquant l'absence du fichier
         if e.to_string().contains("was not found") {
             eprintln!("Le fichier de configuration {} est manquant.", config_file_name);
@@ -76,6 +84,7 @@ fn load_config() -> Result<(MqttConfig, TapoConfig), Box<dyn std::error::Error>>
 
     Ok((mqtt_config, tapo_config))
 }
+
 
 // Fonction pour envoyer le message MQTT
 fn send_mqtt_message(broker: String, client_id: String, mut topic: String, message_content: String, quelproto: String ) {
