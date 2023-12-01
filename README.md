@@ -23,7 +23,9 @@ Lien doc plugin script https://doc.jeedom.com/fr_FR/plugins/programming/script/b
 Credit à Mihai Dinculescu pour son travail remqarquable
 
 
-Voici le cheminement pour réussir a installer cela au sein de Jeedom
+Voici le cheminement pour réussir a installer cela au sein de Jeedom et obtenir ce genre de virtuel 
+
+![Exemple-Objet-Jeedom-Virtuel](https://github.com/fran6t/FT_TP110/assets/4406087/7d2df66f-f5c2-4134-b314-b2571cc10378)
 
 Connectez-vous à votre machine Jeedom avec le terminal SSH.
 
@@ -110,48 +112,4 @@ On change le propriétaire pour que Jeedom puisse avoir la main dessus
 chown www-data:www-data /var/www/html/plugins/script/data/ft_tp110
 ```
 
-Maintenant le reste se passe dans Jeedom avec le plugins script
-
-
-Etape 0
-
-On installe le plugin script officiel Jeedom
-
-![Etape 0](img/0-Script-Officiel.jpg)
-
-
-Etape 1
-
-![Etape 1](img/1-plugin-Mes-Scripts.jpg)
-
-Etape 2
-
-![Etape 2](img/2-Ajout-mes_scripts.jpg)
-
-Etape 3
-
-![Etape 3](img/3-Activer-rendre-visible.jpg)
-
-Etape 4
-
-![Etape 1](img/4-Selection-du-script.jpg)
-
-Etape 5
-
-![Etape 5](img/5-ajouter-une-commande.jpg)
-
-On recommemce avec la commande off
-
-Etape 6
-
-![Etape 6](img/6-les-infos.jpg)
-
-On crée une commande info pour avoir le retour de la puissance qui traverse la prise
-
-
-
-
-
-
-
-
+Dans le wiki sont indiquées les procèdures de configuration de l'objet Scrit, d'un objet Virtuel et l'objet MQTT
